@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Question from './screens/Question';
@@ -36,17 +35,27 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#c0c0c0' }, headerTitleStyle: { fontWeight: 'bold' } }}>
+      <Stack.Navigator 
+        screenOptions={{ 
+          headerStyle: { backgroundColor: '#c0c0c0' }, 
+          headerTitleStyle: { fontWeight: 'bold', fontFamily: 'monospace' } 
+        }}
+      >
         <Stack.Screen 
           name="Question" 
           component={Question} 
           initialParams={{ data: quizData, index: 0, userAnswers: [] }} 
           options={{ title: "Retro Quiz v0.7" }}
         />
-        <Stack.Screen name="Summary" component={Summary} options={{ title: "Results" }} />
+        <Stack.Screen 
+          name="Summary" 
+          component={Summary} 
+          options={{ title: "Results" }} 
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
+// Exporting components as requested
 export { Question, Summary };
