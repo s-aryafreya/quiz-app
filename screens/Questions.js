@@ -6,32 +6,31 @@ export default function Questions({ route, navigation }) {
   const { data, index, userAnswers } = route.params;
   const current = data[index];
 
-  // Logic to handle both single and multiple selection states
-  const [selection, setSelection] = useState(
-    current.type === 'multiple-answer' ? [] : null
-  );
+  // Always start with an empty array to keep ButtonGroup happy
+  const [selection, setSelection] = useState([]);
 
-  // This ensures the screen clears when you move to the next question
   useEffect(() => {
-    setSelection(current.type === 'multiple-answer' ? [] : null);
+    setSelection([]);
   }, [index]);
 
   const handlePress = (idx) => {
     if (current.type === 'multiple-answer') {
-      let newSelection = [...selection];
-      if (newSelection.includes(idx)) {
-        newSelection = newSelection.filter(i => i !== idx);
+      if (selection.includes(idx)) {
+        setSelection(selection.filter(i => i !== idx));
       } else {
-        newSelection.push(idx);
+        setSelection([...selection, idx]);
       }
-      setSelection(newSelection);
     } else {
-      setSelection(idx);
+      // For single choice, we just set the array to contain that one index
+      setSelection([idx]);
     }
   };
 
   const goToNext = () => {
-    const updatedAnswers = [...userAnswers, selection];
+    // For single choice questions, we pass just the number; for multi, the array
+    const answerToStore = current.type === 'multiple-answer' ? selection : selection[0];
+    const updatedAnswers = [...userAnswers, answerToStore];
+    
     if (index + 1 < data.length) {
       navigation.push('Question', { data, index: index + 1, userAnswers: updatedAnswers });
     } else {
@@ -43,7 +42,7 @@ export default function Questions({ route, navigation }) {
     <ScrollView contentContainerStyle={styles.win98Container}>
       <View style={styles.window}>
         <View style={styles.titleBar}>
-          <Text style={styles.titleBarText}>Question.exe - {index + 1}/{data.length}</Text>
+          <Text style={styles.titleBarText}>QUIZ.EXE - {index + 1}/{data.length}</Text>
         </View>
 
         <View style={styles.content}>
@@ -52,8 +51,8 @@ export default function Questions({ route, navigation }) {
           <ButtonGroup
             buttons={current.choices}
             selectMultiple={current.type === 'multiple-answer'}
-            // Force an array for BOTH types so highlights always show
-            selectedIndexes={current.type === 'multiple-answer' ? selection : (selection !== null ? [selection] : [])}
+            // Always passing an array here is the key to the highlight fix
+            selectedIndexes={selection}
             onPress={handlePress}
             vertical
             containerStyle={styles.choiceContainer}
@@ -65,7 +64,7 @@ export default function Questions({ route, navigation }) {
           <Button
             title="NEXT >"
             onPress={goToNext}
-            disabled={selection === null || (Array.isArray(selection) && selection.length === 0)}
+            disabled={selection.length === 0}
             buttonStyle={styles.retroBtn}
             titleStyle={styles.retroBtnTitle}
             disabledStyle={{ opacity: 0.5 }}

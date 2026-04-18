@@ -8,10 +8,10 @@ export default function Summary({ route, navigation }) {
   const checkCorrect = (q, userAns) => {
     if (q.type === 'multiple-answer') {
       if (!Array.isArray(userAns)) return false;
-      // We sort both to ensure the order of clicks doesn't matter
-      const sortedUser = [...userAns].sort((a, b) => a - b).join(',');
-      const sortedCorrect = [...q.correct].sort((a, b) => a - b).join(',');
-      return sortedUser === sortedCorrect;
+      // Numeric sort ensures [0,2,3] always matches [0,2,3] regardless of click order
+      const userStr = [...userAns].sort((a, b) => a - b).join(',');
+      const correctStr = [...q.correct].sort((a, b) => a - b).join(',');
+      return userStr === correctStr;
     }
     return userAns === q.correct;
   };
@@ -21,7 +21,7 @@ export default function Summary({ route, navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.bg}>
       <View style={styles.window}>
-        <View style={styles.titleBar}><Text style={styles.titleText}>FINAL_SCORE.LOG</Text></View>
+        <View style={styles.titleBar}><Text style={styles.titleText}>SUMMARY.LOG</Text></View>
         <View style={styles.scoreBox}>
           <Text style={styles.scoreText}>SCORE: {totalScore} / {data.length}</Text>
         </View>
@@ -50,14 +50,14 @@ export default function Summary({ route, navigation }) {
                 );
               })}
               <Text style={isUserCorrect ? styles.pass : styles.fail}>
-                {isUserCorrect ? "[PASS]" : "[FAIL]"}
+                {isUserCorrect ? "[STATUS: PASS]" : "[STATUS: FAIL]"}
               </Text>
             </View>
           );
         })}
 
         <Button 
-          title="BACK TO START" 
+          title="BACK TO MENU" 
           onPress={() => navigation.popToTop()} 
           buttonStyle={styles.restartBtn}
           titleStyle={styles.btnTitle}
@@ -76,11 +76,11 @@ const styles = StyleSheet.create({
   scoreText: { textAlign: 'center', fontFamily: 'monospace', color: '#D81B60', fontWeight: 'bold', fontSize: 18 },
   resultCard: { paddingHorizontal: 15, paddingVertical: 10 },
   questionPrompt: { fontWeight: 'bold', fontFamily: 'monospace', color: '#D81B60', fontSize: 12 },
-  choiceItem: { fontFamily: 'monospace', fontSize: 11, marginVertical: 1 },
+  choiceItem: { fontFamily: 'monospace', fontSize: 11, marginVertical: 1, color: '#333' },
   boldCorrect: { fontWeight: 'bold', color: '#D81B60' },
   strikeIncorrect: { textDecorationLine: 'line-through', color: '#FF69B4' },
-  pass: { color: '#D81B60', fontWeight: 'bold', fontSize: 10 },
-  fail: { color: '#FF1493', fontWeight: 'bold', fontSize: 10 },
+  pass: { color: '#D81B60', fontWeight: 'bold', fontSize: 10, marginTop: 5 },
+  fail: { color: '#FF1493', fontWeight: 'bold', fontSize: 10, marginTop: 5 },
   restartBtn: { backgroundColor: '#FFD1DC', borderWidth: 2, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60', margin: 15 },
   btnTitle: { color: '#D81B60', fontWeight: 'bold', fontFamily: 'monospace', fontSize: 12 }
 });
