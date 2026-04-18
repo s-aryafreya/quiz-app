@@ -48,18 +48,20 @@ export default function Question({ route, navigation }) {
         <View style={styles.content}>
           <Text style={styles.promptText}>{current.prompt}</Text>
           
-          <ButtonGroup
+          // Inside Question.js - Update your ButtonGroup component:
+            <ButtonGroup
             testID="choices"
             buttons={current.choices}
             selectMultiple={current.type === 'multiple-answer'}
-            selectedIndexes={current.type === 'multiple-answer' ? selection : []}
-            selectedIndex={current.type !== 'multiple-answer' ? selection : null}
+            // For multiple-answer, we pass the array. For others, we wrap the single index in an array
+            selectedIndexes={current.type === 'multiple-answer' ? selection : [selection]}
             onPress={handlePress}
             vertical
             containerStyle={styles.choiceContainer}
-            selectedButtonStyle={styles.selectedChoice}
-            textStyle={styles.choiceText}
-          />
+            selectedButtonStyle={{ backgroundColor: '#D81B60' }} // Darker pink for selection
+            selectedTextStyle={{ color: '#fff' }}
+            textStyle={{ fontFamily: 'monospace', color: '#D81B60' }}
+            />
 
           <Button
             testID="next-question"

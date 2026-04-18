@@ -1,7 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Question from './screens/Question';
+import Home from './screens/Home';
+import Question from './screens/Questions';
 import Summary from './screens/Summary';
 
 // Correct Answers for Sample Data:
@@ -36,22 +37,20 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator 
+        initialRouteName="Home"
         screenOptions={{ 
-          headerStyle: { backgroundColor: '#c0c0c0' }, 
-          headerTitleStyle: { fontWeight: 'bold', fontFamily: 'monospace' } 
+          headerStyle: { backgroundColor: '#FFD1DC' }, // Pastel Pink
+          headerTitleStyle: { fontWeight: 'bold', fontFamily: 'monospace', color: '#D81B60' } 
         }}
       >
+        <Stack.Screen name="Home" component={Home} options={{ title: "Welcome" }} />
         <Stack.Screen 
           name="Question" 
           component={Question} 
           initialParams={{ data: quizData, index: 0, userAnswers: [] }} 
-          options={{ title: "Retro Quiz v0.7" }}
+          options={{ title: "Retro Quiz v0.8" }}
         />
-        <Stack.Screen 
-          name="Summary" 
-          component={Summary} 
-          options={{ title: "Results" }} 
-        />
+        <Stack.Screen name="Summary" component={Summary} options={{ title: "Results" }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

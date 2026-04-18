@@ -1,16 +1,13 @@
 import React from 'react';
-// Combine all react-native imports into one clean line
 import { ScrollView, View, StyleSheet } from 'react-native';
-// Use the themed components from RNEui
-import { Text, Divider } from '@rneui/themed';
+import { Text, Divider, Button } from '@rneui/themed';
 
-export default function Summary({ route }) {
+export default function Summary({ route, navigation }) {
   const { data, userAnswers } = route.params;
 
   const checkCorrect = (q, userAns) => {
     if (q.type === 'multiple-answer') {
       if (!Array.isArray(userAns)) return false;
-      // Sort both arrays to ensure [0, 2] matches [2, 0]
       return [...userAns].sort().join(',') === [...q.correct].sort().join(',');
     }
     return userAns === q.correct;
@@ -20,7 +17,7 @@ export default function Summary({ route }) {
 
   return (
     <ScrollView style={styles.bg}>
-      {/* Score Display Window */}
+      {/* Pink Score Display Window */}
       <View style={styles.scoreBox}>
         <Text h2 testID="total" style={styles.scoreText}>
           TOTAL: {totalScore} / {data.length}
@@ -34,15 +31,13 @@ export default function Summary({ route }) {
         return (
           <View key={qIdx} style={styles.resultCard}>
             <Text style={styles.questionPrompt}>{qIdx + 1}. {q.prompt}</Text>
-            <Divider style={{ marginVertical: 10 }} />
+            <Divider color="#FFB6C1" style={{ marginVertical: 10 }} />
             
             {q.choices.map((choice, cIdx) => {
-              // Determine if this specific choice was picked and if it's correct
               const wasSelected = Array.isArray(userAns) ? userAns.includes(cIdx) : userAns === cIdx;
               const isRight = Array.isArray(q.correct) ? q.correct.includes(cIdx) : q.correct === cIdx;
 
               let textStyle = {};
-              // Logic: Bold if it's correct (whether chosen or not), Strike if chosen but wrong
               if (wasSelected && isRight) textStyle = styles.boldCorrect;
               if (wasSelected && !isRight) textStyle = styles.strikeIncorrect;
               if (!wasSelected && isRight) textStyle = styles.boldCorrect;
@@ -61,7 +56,14 @@ export default function Summary({ route }) {
         );
       })}
       
-      {/* Space at the bottom for scrolling */}
+      {/* Restart Button to go back to Home */}
+      <Button 
+        title="< BACK TO START" 
+        onPress={() => navigation.popToTop()} 
+        buttonStyle={styles.restartBtn}
+        titleStyle={styles.restartBtnTitle}
+      />
+
       <View style={{ height: 50 }} />
     </ScrollView>
   );
@@ -70,39 +72,39 @@ export default function Summary({ route }) {
 const styles = StyleSheet.create({
   bg: { 
     flex: 1, 
-    backgroundColor: '#008080', 
+    backgroundColor: '#FFB6C1', // Light Pink Background
     padding: 15 
   },
   scoreBox: { 
-    backgroundColor: '#c0c0c0', 
+    backgroundColor: '#FFF0F5', 
     padding: 20, 
     marginBottom: 20, 
-    borderWidth: 2, 
-    borderBottomColor: '#000', 
-    borderRightColor: '#000',
+    borderWidth: 3, 
+    borderBottomColor: '#D81B60', 
+    borderRightColor: '#D81B60',
     borderTopColor: '#fff',
     borderLeftColor: '#fff'
   },
   scoreText: { 
     textAlign: 'center', 
     fontFamily: 'monospace', 
-    color: '#000080',
+    color: '#D81B60',
     fontWeight: 'bold'
   },
   resultCard: { 
-    backgroundColor: '#c0c0c0', 
+    backgroundColor: '#FFF0F5', 
     padding: 15, 
     marginBottom: 15, 
-    borderWidth: 2, 
+    borderWidth: 3, 
     borderTopColor: '#fff', 
     borderLeftColor: '#fff',
-    borderRightColor: '#000',
-    borderBottomColor: '#000'
+    borderRightColor: '#D81B60',
+    borderBottomColor: '#D81B60'
   },
   questionPrompt: { 
     fontWeight: 'bold', 
     fontFamily: 'monospace',
-    color: '#000'
+    color: '#D81B60'
   },
   choiceItem: { 
     fontFamily: 'monospace', 
@@ -111,22 +113,36 @@ const styles = StyleSheet.create({
   },
   boldCorrect: { 
     fontWeight: 'bold', 
-    color: '#000080' 
+    color: '#D81B60' // Bold pink for correct
   },
   strikeIncorrect: { 
     textDecorationLine: 'line-through', 
-    color: '#ff0000' 
+    color: '#FF69B4' // Hot pink for incorrect
   },
   pass: { 
     marginTop: 10, 
-    color: 'green', 
+    color: '#D81B60', 
     fontWeight: 'bold',
     fontFamily: 'monospace'
   },
   fail: { 
     marginTop: 10, 
-    color: 'red', 
+    color: '#FF1493', 
     fontWeight: 'bold',
     fontFamily: 'monospace'
+  },
+  restartBtn: { 
+    backgroundColor: '#FFD1DC', 
+    borderWidth: 2, 
+    borderTopColor: '#fff', 
+    borderLeftColor: '#fff', 
+    borderRightColor: '#D81B60', 
+    borderBottomColor: '#D81B60',
+    marginTop: 10 
+  },
+  restartBtnTitle: { 
+    color: '#D81B60', 
+    fontFamily: 'monospace', 
+    fontWeight: 'bold' 
   }
 });
