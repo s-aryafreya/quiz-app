@@ -8,7 +8,6 @@ export default function Summary({ route, navigation }) {
   const checkCorrect = (q, userAns) => {
     if (q.type === 'multiple-answer') {
       if (!Array.isArray(userAns)) return false;
-      // Numeric sort ensures [0,2,3] always matches [0,2,3] regardless of click order
       const userStr = [...userAns].sort((a, b) => a - b).join(',');
       const correctStr = [...q.correct].sort((a, b) => a - b).join(',');
       return userStr === correctStr;
@@ -50,7 +49,7 @@ export default function Summary({ route, navigation }) {
                 );
               })}
               <Text style={isUserCorrect ? styles.pass : styles.fail}>
-                {isUserCorrect ? "[STATUS: PASS]" : "[STATUS: FAIL]"}
+                {isUserCorrect ? "[PASS]" : "[FAIL]"}
               </Text>
             </View>
           );
