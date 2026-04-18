@@ -8,7 +8,10 @@ export default function Summary({ route, navigation }) {
   const checkCorrect = (q, userAns) => {
     if (q.type === 'multiple-answer') {
       if (!Array.isArray(userAns)) return false;
-      return [...userAns].sort().join(',') === [...q.correct].sort().join(',');
+      // Sort and stringify to compare [0, 2, 3] correctly
+      const sortedUser = [...userAns].sort((a, b) => a - b).join(',');
+      const sortedCorrect = [...q.correct].sort((a, b) => a - b).join(',');
+      return sortedUser === sortedCorrect;
     }
     return userAns === q.correct;
   };
@@ -18,10 +21,10 @@ export default function Summary({ route, navigation }) {
   return (
     <ScrollView contentContainerStyle={styles.bg}>
       <View style={styles.window}>
-        <View style={styles.titleBar}><Text style={styles.titleText}>RESULTS.TXT</Text></View>
+        <View style={styles.titleBar}><Text style={styles.titleText}>FINAL_SCORE.LOG</Text></View>
         
         <View style={styles.scoreBox}>
-          <Text h4 testID="total" style={styles.scoreText}>TOTAL: {totalScore} / {data.length}</Text>
+          <Text testID="total" style={styles.scoreText}>SCORE: {totalScore} / {data.length}</Text>
         </View>
 
         {data.map((q, qIdx) => {
@@ -31,7 +34,7 @@ export default function Summary({ route, navigation }) {
           return (
             <View key={qIdx} style={styles.resultCard}>
               <Text style={styles.questionPrompt}>{qIdx + 1}. {q.prompt}</Text>
-              <Divider color="#FFB6C1" style={{ marginVertical: 8 }} />
+              <Divider color="#FFB6C1" style={{ marginVertical: 5 }} />
               {q.choices.map((choice, cIdx) => {
                 const wasSelected = Array.isArray(userAns) ? userAns.includes(cIdx) : userAns === cIdx;
                 const isRight = Array.isArray(q.correct) ? q.correct.includes(cIdx) : q.correct === cIdx;
@@ -55,31 +58,31 @@ export default function Summary({ route, navigation }) {
         })}
 
         <Button 
-          title="< BACK TO START" 
+          title="BACK TO START" 
           onPress={() => navigation.popToTop()} 
           buttonStyle={styles.restartBtn}
           titleStyle={styles.btnTitle}
         />
       </View>
-      <View style={{ height: 40 }} />
+      <View style={{ height: 30 }} />
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  bg: { flexGrow: 1, backgroundColor: '#FFB6C1', padding: 15, alignItems: 'center' },
-  window: { width: '95%', backgroundColor: '#FFF0F5', borderWidth: 3, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60', padding: 4 },
-  titleBar: { backgroundColor: '#D81B60', padding: 5, marginBottom: 15 },
-  titleText: { color: 'white', fontFamily: 'monospace', fontWeight: 'bold' },
-  scoreBox: { backgroundColor: '#FFD1DC', padding: 15, marginBottom: 15, borderWidth: 2, borderStyle: 'dashed', borderColor: '#D81B60' },
-  scoreText: { textAlign: 'center', fontFamily: 'monospace', color: '#D81B60', fontWeight: 'bold' },
-  resultCard: { padding: 10, marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#FFD1DC' },
-  questionPrompt: { fontWeight: 'bold', fontFamily: 'monospace', color: '#D81B60', fontSize: 13 },
-  choiceItem: { fontFamily: 'monospace', fontSize: 12, marginVertical: 1 },
+  bg: { flexGrow: 1, backgroundColor: '#FFB6C1', padding: 15, alignItems: 'center', justifyContent: 'center' },
+  window: { width: '90%', backgroundColor: '#FFF0F5', borderWidth: 3, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60' },
+  titleBar: { backgroundColor: '#D81B60', padding: 4 },
+  titleText: { color: 'white', fontFamily: 'monospace', fontWeight: 'bold', fontSize: 11 },
+  scoreBox: { backgroundColor: '#FFD1DC', padding: 10, margin: 10, borderWidth: 2, borderStyle: 'dashed', borderColor: '#D81B60' },
+  scoreText: { textAlign: 'center', fontFamily: 'monospace', color: '#D81B60', fontWeight: 'bold', fontSize: 18 },
+  resultCard: { paddingHorizontal: 15, paddingVertical: 10 },
+  questionPrompt: { fontWeight: 'bold', fontFamily: 'monospace', color: '#D81B60', fontSize: 12 },
+  choiceItem: { fontFamily: 'monospace', fontSize: 11, marginVertical: 1 },
   boldCorrect: { fontWeight: 'bold', color: '#D81B60' },
   strikeIncorrect: { textDecorationLine: 'line-through', color: '#FF69B4' },
-  pass: { color: '#D81B60', fontWeight: 'bold', fontSize: 10, marginTop: 5 },
-  fail: { color: '#FF1493', fontWeight: 'bold', fontSize: 10, marginTop: 5 },
-  restartBtn: { backgroundColor: '#FFD1DC', borderWidth: 2, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60', margin: 10 },
-  btnTitle: { color: '#D81B60', fontWeight: 'bold', fontFamily: 'monospace' }
+  pass: { color: '#D81B60', fontWeight: 'bold', fontSize: 10 },
+  fail: { color: '#FF1493', fontWeight: 'bold', fontSize: 10 },
+  restartBtn: { backgroundColor: '#FFD1DC', borderWidth: 2, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60', margin: 15 },
+  btnTitle: { color: '#D81B60', fontWeight: 'bold', fontFamily: 'monospace', fontSize: 12 }
 });
