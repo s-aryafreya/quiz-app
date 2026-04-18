@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Home from './screens/Home';
-import Question from './screens/Questions';
+import Questions from './screens/Questions';
 import Summary from './screens/Summary';
 
 const quizData = [
@@ -16,7 +16,7 @@ const quizData = [
     prompt: "Which of these are planets?",
     type: "multiple-answer",
     choices: ["Mars", "The Sun", "Jupiter", "Saturn"],
-    correct: [0, 2, 3] // Mars, Jupiter, and Saturn
+    correct: [0, 2, 3] 
   },
   {
     prompt: "The Earth is flat.",
@@ -41,7 +41,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ title: "Welcome" }} />
         <Stack.Screen 
           name="Question" 
-          component={Question} 
+          component={Questions} // Using the Questions component
           initialParams={{ data: quizData, index: 0, userAnswers: [] }} 
           options={{ title: "Retro Quiz v0.8" }}
         />
@@ -50,5 +50,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-export { Question, Summary };

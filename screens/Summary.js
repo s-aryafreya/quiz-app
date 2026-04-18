@@ -8,7 +8,7 @@ export default function Summary({ route, navigation }) {
   const checkCorrect = (q, userAns) => {
     if (q.type === 'multiple-answer') {
       if (!Array.isArray(userAns)) return false;
-      // Sort and stringify to compare [0, 2, 3] correctly
+      // We sort both to ensure the order of clicks doesn't matter
       const sortedUser = [...userAns].sort((a, b) => a - b).join(',');
       const sortedCorrect = [...q.correct].sort((a, b) => a - b).join(',');
       return sortedUser === sortedCorrect;
@@ -22,9 +22,8 @@ export default function Summary({ route, navigation }) {
     <ScrollView contentContainerStyle={styles.bg}>
       <View style={styles.window}>
         <View style={styles.titleBar}><Text style={styles.titleText}>FINAL_SCORE.LOG</Text></View>
-        
         <View style={styles.scoreBox}>
-          <Text testID="total" style={styles.scoreText}>SCORE: {totalScore} / {data.length}</Text>
+          <Text style={styles.scoreText}>SCORE: {totalScore} / {data.length}</Text>
         </View>
 
         {data.map((q, qIdx) => {
@@ -64,7 +63,6 @@ export default function Summary({ route, navigation }) {
           titleStyle={styles.btnTitle}
         />
       </View>
-      <View style={{ height: 30 }} />
     </ScrollView>
   );
 }

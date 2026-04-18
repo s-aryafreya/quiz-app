@@ -2,31 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Button, Text, ButtonGroup } from '@rneui/themed';
 
-export default function Question({ route, navigation }) {
+export default function Questions({ route, navigation }) {
   const { data, index, userAnswers } = route.params;
   const current = data[index];
 
-  // Initialize selection
+  // Logic to handle both single and multiple selection states
   const [selection, setSelection] = useState(
     current.type === 'multiple-answer' ? [] : null
   );
 
-  // Sync state when moving to a new question
+  // This ensures the screen clears when you move to the next question
   useEffect(() => {
     setSelection(current.type === 'multiple-answer' ? [] : null);
   }, [index]);
 
   const handlePress = (idx) => {
     if (current.type === 'multiple-answer') {
-      // Toggle logic for multiple selection
-      setSelection((prev) => {
-        const existing = Array.isArray(prev) ? prev : [];
-        if (existing.includes(idx)) {
-          return existing.filter(i => i !== idx);
-        } else {
-          return [...existing, idx];
-        }
-      });
+      let newSelection = [...selection];
+      if (newSelection.includes(idx)) {
+        newSelection = newSelection.filter(i => i !== idx);
+      } else {
+        newSelection.push(idx);
+      }
+      setSelection(newSelection);
     } else {
       setSelection(idx);
     }
@@ -52,10 +50,9 @@ export default function Question({ route, navigation }) {
           <Text style={styles.promptText}>{current.prompt}</Text>
           
           <ButtonGroup
-            testID="choices"
             buttons={current.choices}
             selectMultiple={current.type === 'multiple-answer'}
-            // IMPORTANT: selectedIndexes must always be an array for highlights to work reliably
+            // Force an array for BOTH types so highlights always show
             selectedIndexes={current.type === 'multiple-answer' ? selection : (selection !== null ? [selection] : [])}
             onPress={handlePress}
             vertical
@@ -66,7 +63,6 @@ export default function Question({ route, navigation }) {
           />
 
           <Button
-            testID="next-question"
             title="NEXT >"
             onPress={goToNext}
             disabled={selection === null || (Array.isArray(selection) && selection.length === 0)}
