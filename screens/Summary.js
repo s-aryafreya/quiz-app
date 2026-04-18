@@ -1,4 +1,5 @@
 import React from 'react';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Text, Divider } from '@rneui/themed';
 
