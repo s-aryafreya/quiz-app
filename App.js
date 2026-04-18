@@ -5,11 +5,6 @@ import Home from './screens/Home';
 import Question from './screens/Questions';
 import Summary from './screens/Summary';
 
-// Correct Answers for Sample Data:
-// 1. "multiple-choice": Choice 1 (index 0) is "The Sun"
-// 2. "multiple-answer": Choice 1 (index 0) and Choice 3 (index 2) are "Mars" and "Jupiter"
-// 3. "true-false": Choice 2 (index 1) is "False"
-
 const quizData = [
   {
     prompt: "What is at the center of our solar system?",
@@ -20,8 +15,8 @@ const quizData = [
   {
     prompt: "Which of these are planets?",
     type: "multiple-answer",
-    choices: ["Mars", "The Sun", "Jupiter", "Pluto"],
-    correct: [0, 2]
+    choices: ["Mars", "The Sun", "Jupiter", "Saturn"],
+    correct: [0, 2, 3] // Mars, Jupiter, and Saturn
   },
   {
     prompt: "The Earth is flat.",
@@ -39,7 +34,7 @@ export default function App() {
       <Stack.Navigator 
         initialRouteName="Home"
         screenOptions={{ 
-          headerStyle: { backgroundColor: '#FFD1DC' }, // Pastel Pink
+          headerStyle: { backgroundColor: '#FFD1DC' },
           headerTitleStyle: { fontWeight: 'bold', fontFamily: 'monospace', color: '#D81B60' } 
         }}
       >
@@ -56,5 +51,4 @@ export default function App() {
   );
 }
 
-// Exporting components as requested
 export { Question, Summary };

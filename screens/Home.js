@@ -20,11 +20,11 @@ export default function Home({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#FFB6C1', justifyContent: 'center', padding: 20 },
-  window: { backgroundColor: '#FFF0F5', borderWidth: 3, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60', padding: 10, alignItems: 'center' },
+  container: { flex: 1, backgroundColor: '#FFB6C1', justifyContent: 'center', alignItems: 'center' },
+  window: { width: '85%', backgroundColor: '#FFF0F5', borderWidth: 3, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60', padding: 4 },
   titleBar: { backgroundColor: '#D81B60', alignSelf: 'stretch', padding: 5, marginBottom: 20 },
   titleText: { color: 'white', fontFamily: 'monospace', fontWeight: 'bold' },
-  header: { fontSize: 22, fontFamily: 'monospace', marginBottom: 20, color: '#D81B60', textAlign: 'center' },
+  header: { fontSize: 20, fontFamily: 'monospace', marginBottom: 20, color: '#D81B60', textAlign: 'center' },
   btn: { backgroundColor: '#FFD1DC', borderWidth: 2, borderTopColor: '#fff', borderLeftColor: '#fff', borderRightColor: '#D81B60', borderBottomColor: '#D81B60' },
   btnTitle: { color: '#D81B60', fontWeight: 'bold', fontFamily: 'monospace' }
 });
